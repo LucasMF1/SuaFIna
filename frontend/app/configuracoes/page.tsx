@@ -15,7 +15,8 @@ export default function Configuracoes() {
   const [password, setPassword] = useState("senhasegura123");
   const [isEditingName, setIsEditingName] = useState(false);
   const [newUsername, setNewUsername] = useState(username);
-  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://default-url.com";
+  const BASE_URL =
+    process.env.NEXT_PUBLIC_BASE_URL || "https://default-url.com";
 
   const handleDeleteAccount = () => {
     setShowDeleteAlert(true);
@@ -44,38 +45,37 @@ export default function Configuracoes() {
 
   const { setUsername } = useAuth(); // Adicione isso para atualizar o contexto
 
-const handleNameEdit = async () => {
-  if (!newUsername.trim()) return;
-  try {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      alert("Usuário não autenticado!");
-      return;
-    }
-
-    const response = await axios.patch(
-      `${BASE_URL}/user/update`,
-      { name: newUsername }, 
-      {
-        headers: { Authorization: `Bearer ${token}` },
+  const handleNameEdit = async () => {
+    if (!newUsername.trim()) return;
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        alert("Usuário não autenticado!");
+        return;
       }
-    );
 
-    if (response.status === 200) {
-      alert("Nome atualizado com sucesso!");
-      setIsEditingName(false);
-      
-      // Atualiza o nome no contexto de autenticação para refletir em toda a aplicação
-      setUsername(newUsername);
-    } else {
-      alert("Erro ao atualizar nome.");
+      const response = await axios.patch(
+        `${BASE_URL}/user/update`,
+        { name: newUsername },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        },
+      );
+
+      if (response.status === 200) {
+        alert("Nome atualizado com sucesso!");
+        setIsEditingName(false);
+
+        // Atualiza o nome no contexto de autenticação para refletir em toda a aplicação
+        setUsername(newUsername);
+      } else {
+        alert("Erro ao atualizar nome.");
+      }
+    } catch (error) {
+      console.error("Erro ao atualizar nome:", error);
+      alert("Erro ao atualizar nome. Tente novamente.");
     }
-  } catch (error) {
-    console.error("Erro ao atualizar nome:", error);
-    alert("Erro ao atualizar nome. Tente novamente.");
-  }
-};
-
+  };
 
   if (!isAuthenticated) {
     return (
@@ -124,11 +124,21 @@ const handleNameEdit = async () => {
           )}
 
           <div className="input-field">
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" />
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email"
+            />
           </div>
 
           <div className="input-field">
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Senha" />
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Senha"
+            />
           </div>
 
           {isEditingName ? (
@@ -147,11 +157,14 @@ const handleNameEdit = async () => {
             <div className="alert-dialog">
               <h3 className="alert-title">Atenção!</h3>
               <p className="alert-message">
-                Tem certeza que deseja apagar sua conta? Esta ação não pode ser desfeita e todos os seus dados serão
-                perdidos permanentemente.
+                Tem certeza que deseja apagar sua conta? Esta ação não pode ser
+                desfeita e todos os seus dados serão perdidos permanentemente.
               </p>
               <div className="alert-buttons">
-                <button className="alert-cancel" onClick={() => setShowDeleteAlert(false)}>
+                <button
+                  className="alert-cancel"
+                  onClick={() => setShowDeleteAlert(false)}
+                >
                   Cancelar
                 </button>
                 <button className="alert-confirm" onClick={confirmDelete}>

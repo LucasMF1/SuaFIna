@@ -1,6 +1,5 @@
 "use client";
 
-
 import { useState, useEffect } from "react";
 
 import Link from "next/link";
@@ -10,19 +9,31 @@ import Layout from "../components/Layout";
 import { useAuth } from "../contexts/AuthContext";
 
 const months = [
-
-  "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-  "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
-
+  "Janeiro",
+  "Fevereiro",
+  "Março",
+  "Abril",
+  "Maio",
+  "Junho",
+  "Julho",
+  "Agosto",
+  "Setembro",
+  "Outubro",
+  "Novembro",
+  "Dezembro",
 ];
 
 export default function Receitas() {
   const { isAuthenticated } = useAuth();
 
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://default-url.com";
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const BASE_URL =
+    process.env.NEXT_PUBLIC_BASE_URL || "https://default-url.com";
 
-  const [currentMonthIndex, setCurrentMonthIndex] = useState(new Date().getMonth());
+  const [currentMonthIndex, setCurrentMonthIndex] = useState(
+    new Date().getMonth(),
+  );
   const [receitas, setReceitas] = useState<any[]>([]);
   const [, setDespesas] = useState<any[]>([]);
   const [totalRecebido, setTotalRecebido] = useState(0);
@@ -33,13 +44,16 @@ export default function Receitas() {
 
     const fetchTransacoes = async () => {
       try {
-        const response = await fetch(`${BASE_URL}/transaction/recent?limit=100`, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
+        const response = await fetch(
+          `${BASE_URL}/transaction/recent?limit=100`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
           },
-        });
+        );
 
         if (!response.ok) {
           throw new Error(`Erro ao buscar transações: ${response.statusText}`);
@@ -54,21 +68,27 @@ export default function Receitas() {
         const receitasFiltradas = data.recent.transaction.filter(
           (item: any) =>
             item.type === "INCOME" &&
-            new Date(item.date).getMonth() === currentMonthIndex
+            new Date(item.date).getMonth() === currentMonthIndex,
         );
 
         const despesasFiltradas = data.recent.transaction.filter(
           (item: any) =>
             item.type === "EXPENSE" &&
-            new Date(item.date).getMonth() === currentMonthIndex
+            new Date(item.date).getMonth() === currentMonthIndex,
         );
 
         setReceitas(receitasFiltradas);
         setDespesas(despesasFiltradas);
 
         // Calcula os totais
-        const totalReceitas = receitasFiltradas.reduce((sum: number, r: any) => sum + r.amount, 0);
-        const totalDespesas = despesasFiltradas.reduce((sum: number, d: any) => sum + d.amount, 0);
+        const totalReceitas = receitasFiltradas.reduce(
+          (sum: number, r: any) => sum + r.amount,
+          0,
+        );
+        const totalDespesas = despesasFiltradas.reduce(
+          (sum: number, d: any) => sum + d.amount,
+          0,
+        );
 
         setTotalRecebido(totalReceitas);
         setTotalGasto(totalDespesas);
@@ -80,18 +100,18 @@ export default function Receitas() {
     fetchTransacoes();
   }, [currentMonthIndex, token, isAuthenticated, BASE_URL]);
 
-  const previousMonth = () => setCurrentMonthIndex(prev => (prev > 0 ? prev - 1 : months.length - 1));
-  const nextMonth = () => setCurrentMonthIndex(prev => (prev < months.length - 1 ? prev + 1 : 0));
+  const previousMonth = () =>
+    setCurrentMonthIndex((prev) => (prev > 0 ? prev - 1 : months.length - 1));
+  const nextMonth = () =>
+    setCurrentMonthIndex((prev) => (prev < months.length - 1 ? prev + 1 : 0));
 
   // Atualiza a classe do <body> corretamente ao carregar a página
   useEffect(() => {
     document.body.classList.remove("despesas-page"); // Remover a classe da página anterior
-    document.body.classList.add("receitas-page");    // Adicionar a classe correta
+    document.body.classList.add("receitas-page"); // Adicionar a classe correta
 
     return () => document.body.classList.remove("receitas-page");
-}, []);
-
-
+  }, []);
 
   if (!isAuthenticated) {
     return (
@@ -141,12 +161,16 @@ export default function Receitas() {
               <tbody>
                 {receitas.length === 0 ? (
                   <tr>
-                    <td colSpan={4} style={{ textAlign: "center" }}>Nenhuma receita encontrada</td>
+                    <td colSpan={4} style={{ textAlign: "center" }}>
+                      Nenhuma receita encontrada
+                    </td>
                   </tr>
                 ) : (
                   receitas.map((receita: any, index: number) => (
                     <tr key={index}>
-                      <td>{new Date(receita.date).toLocaleDateString("pt-BR")}</td>
+                      <td>
+                        {new Date(receita.date).toLocaleDateString("pt-BR")}
+                      </td>
                       <td>{receita.categoryName || "Sem categoria"}</td>
                       <td>{receita.description || "Sem descrição"}</td>
                       <td>R$ {receita.amount.toFixed(2)}</td>
@@ -175,7 +199,9 @@ export default function Receitas() {
           </div>
           <div className="summary-card total">
             <h3>Saldo do Mês</h3>
-            <p className="amount">R$ {(totalRecebido - totalGasto).toFixed(2)}</p>
+            <p className="amount">
+              R$ {(totalRecebido - totalGasto).toFixed(2)}
+            </p>
             <div className="icon balance">⚖</div>
           </div>
         </div>

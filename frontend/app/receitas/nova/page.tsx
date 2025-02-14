@@ -1,6 +1,5 @@
 "use client";
 
-
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { FaArrowLeft } from "react-icons/fa";
@@ -9,16 +8,20 @@ import { useAuth } from "../../contexts/AuthContext";
 
 export default function NovaReceita() {
   const { isAuthenticated } = useAuth();
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://default-url.com";
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const BASE_URL =
+    process.env.NEXT_PUBLIC_BASE_URL || "https://default-url.com";
 
   const [valor, setValor] = useState("0.00");
   const [categoria, setCategoria] = useState("");
   const [descricao, setDescricao] = useState("");
-  const [categoriasExistentes, setCategoriasExistentes] = useState<string[]>([]);
+  const [categoriasExistentes, setCategoriasExistentes] = useState<string[]>(
+    [],
+  );
   const [dataPagamento, setDataPagamento] = useState("HOJE");
   const [dataPersonalizada, setDataPersonalizada] = useState(
-    new Date().toISOString().split("T")[0]
+    new Date().toISOString().split("T")[0],
   );
 
   useEffect(() => {
@@ -129,7 +132,7 @@ export default function NovaReceita() {
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(
-          `Erro ao criar receita: ${errorData.message || response.statusText}`
+          `Erro ao criar receita: ${errorData.message || response.statusText}`,
         );
       }
 
@@ -138,7 +141,6 @@ export default function NovaReceita() {
       console.error("Erro ao criar receita:", error);
       alert("Erro ao criar receita. Tente novamente.");
     }
-
   };
 
   return (
@@ -187,7 +189,6 @@ export default function NovaReceita() {
             </button>
           </div>
 
-
           {dataPagamento === "OUTROS" && (
             <div className="input-field">
               <input
@@ -200,7 +201,10 @@ export default function NovaReceita() {
 
           {/* Select para escolher categoria existente */}
           <div className="input-field">
-            <select value={categoria} onChange={(e) => setCategoria(e.target.value)}>
+            <select
+              value={categoria}
+              onChange={(e) => setCategoria(e.target.value)}
+            >
               <option value="">Selecione uma categoria...</option>
               {categoriasExistentes.map((cat, index) => (
                 <option key={index} value={cat}>
@@ -232,7 +236,6 @@ export default function NovaReceita() {
           <div className="form-actions">
             <button type="submit" className="primary-button">
               Salvar Receita
-
             </button>
           </div>
         </form>

@@ -1,4 +1,3 @@
-
 "use client";
 
 import type React from "react";
@@ -14,7 +13,9 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [username, setUsername] = useState("");
 
@@ -43,12 +44,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, username, login, logout, setUsername }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, username, login, logout, setUsername }}
+    >
       {children}
     </AuthContext.Provider>
   );
 };
-
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
@@ -57,5 +59,3 @@ export const useAuth = () => {
   }
   return context;
 };
-
-

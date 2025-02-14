@@ -38,7 +38,9 @@
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  transition: background-color 0.2s, color 0.2s;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
 }
 
 .close-button:hover {
@@ -134,4 +136,3 @@ button[type="submit"] {
     font-size: 16px;
   }
 }
-

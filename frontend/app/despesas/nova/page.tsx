@@ -1,6 +1,5 @@
 "use client";
 
-
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { FaArrowLeft } from "react-icons/fa";
@@ -9,16 +8,20 @@ import { useAuth } from "../../contexts/AuthContext";
 
 export default function NovaDespesa() {
   const { isAuthenticated } = useAuth();
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://default-url.com";
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const BASE_URL =
+    process.env.NEXT_PUBLIC_BASE_URL || "https://default-url.com";
 
   const [valor, setValor] = useState("0.00");
   const [categoria, setCategoria] = useState("");
   const [descricao, setDescricao] = useState("");
-  const [categoriasExistentes, setCategoriasExistentes] = useState<string[]>([]);
+  const [categoriasExistentes, setCategoriasExistentes] = useState<string[]>(
+    [],
+  );
   const [dataPagamento, setDataPagamento] = useState("HOJE");
   const [dataPersonalizada, setDataPersonalizada] = useState(
-    new Date().toISOString().split("T")[0]
+    new Date().toISOString().split("T")[0],
   );
 
   useEffect(() => {
@@ -122,7 +125,9 @@ export default function NovaDespesa() {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(`Erro ao criar despesa: ${errorData.message || response.statusText}`);
+        throw new Error(
+          `Erro ao criar despesa: ${errorData.message || response.statusText}`,
+        );
       }
 
       alert("Despesa criada com sucesso!");
@@ -130,7 +135,6 @@ export default function NovaDespesa() {
       console.error("Erro ao criar despesa:", error);
       alert("Erro ao criar despesa. Tente novamente.");
     }
-
   };
 
   return (
@@ -146,46 +150,88 @@ export default function NovaDespesa() {
         <form onSubmit={handleSubmit}>
           <div className="value-input">
             <span className="currency">R$</span>
-            <input type="number" step="0.01" value={valor} onChange={(e) => setValor(e.target.value)} placeholder="0.00" />
+            <input
+              type="number"
+              step="0.01"
+              value={valor}
+              onChange={(e) => setValor(e.target.value)}
+              placeholder="0.00"
+            />
           </div>
 
           <div className="date-selector">
-            <button type="button" className={dataPagamento === "HOJE" ? "active" : ""} onClick={() => setDataPagamento("HOJE")}>HOJE</button>
-            <button type="button" className={dataPagamento === "ONTEM" ? "active" : ""} onClick={() => setDataPagamento("ONTEM")}>ONTEM</button>
-            <button type="button" className={dataPagamento === "OUTROS" ? "active" : ""} onClick={() => setDataPagamento("OUTROS")}>OUTROS</button>
+            <button
+              type="button"
+              className={dataPagamento === "HOJE" ? "active" : ""}
+              onClick={() => setDataPagamento("HOJE")}
+            >
+              HOJE
+            </button>
+            <button
+              type="button"
+              className={dataPagamento === "ONTEM" ? "active" : ""}
+              onClick={() => setDataPagamento("ONTEM")}
+            >
+              ONTEM
+            </button>
+            <button
+              type="button"
+              className={dataPagamento === "OUTROS" ? "active" : ""}
+              onClick={() => setDataPagamento("OUTROS")}
+            >
+              OUTROS
+            </button>
           </div>
 
           {dataPagamento === "OUTROS" && (
             <div className="input-field">
-              <input type="date" value={dataPersonalizada} onChange={(e) => setDataPersonalizada(e.target.value)} />
+              <input
+                type="date"
+                value={dataPersonalizada}
+                onChange={(e) => setDataPersonalizada(e.target.value)}
+              />
             </div>
           )}
 
-
           <div className="input-field">
-            <select value={categoria} onChange={(e) => setCategoria(e.target.value)}>
+            <select
+              value={categoria}
+              onChange={(e) => setCategoria(e.target.value)}
+            >
               <option value="">Selecione uma categoria...</option>
               {categoriasExistentes.map((cat, index) => (
-                <option key={index} value={cat}>{cat}</option>
+                <option key={index} value={cat}>
+                  {cat}
+                </option>
               ))}
             </select>
           </div>
 
-
           <div className="input-field">
-            <input type="text" value={categoria} onChange={(e) => setCategoria(e.target.value)} placeholder="Ou digite uma nova categoria" />
+            <input
+              type="text"
+              value={categoria}
+              onChange={(e) => setCategoria(e.target.value)}
+              placeholder="Ou digite uma nova categoria"
+            />
           </div>
 
           <div className="input-field">
-            <input type="text" value={descricao} onChange={(e) => setDescricao(e.target.value)} placeholder="Digite a descrição da despesa" />
+            <input
+              type="text"
+              value={descricao}
+              onChange={(e) => setDescricao(e.target.value)}
+              placeholder="Digite a descrição da despesa"
+            />
           </div>
 
           <div className="form-actions">
-            <button type="submit" className="primary-button danger">Salvar Despesa</button>
+            <button type="submit" className="primary-button danger">
+              Salvar Despesa
+            </button>
           </div>
         </form>
       </div>
     </div>
   );
 }
-

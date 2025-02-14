@@ -1,6 +1,5 @@
 "use client";
 
-
 import { useState, useEffect } from "react";
 
 import Link from "next/link";
@@ -10,19 +9,31 @@ import Layout from "../components/Layout";
 import { useAuth } from "../contexts/AuthContext";
 
 const months = [
-
-  "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho",
-  "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
-
+  "Janeiro",
+  "Fevereiro",
+  "Março",
+  "Abril",
+  "Maio",
+  "Junho",
+  "Julho",
+  "Agosto",
+  "Setembro",
+  "Outubro",
+  "Novembro",
+  "Dezembro",
 ];
 
 export default function Despesas() {
   const { isAuthenticated } = useAuth();
 
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://default-url.com";
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const BASE_URL =
+    process.env.NEXT_PUBLIC_BASE_URL || "https://default-url.com";
 
-  const [currentMonthIndex, setCurrentMonthIndex] = useState(new Date().getMonth());
+  const [currentMonthIndex, setCurrentMonthIndex] = useState(
+    new Date().getMonth(),
+  );
   const [despesas, setDespesas] = useState([]);
   const [totalDespesas, setTotalDespesas] = useState(0);
 
@@ -31,13 +42,16 @@ export default function Despesas() {
 
     const fetchDespesas = async () => {
       try {
-        const response = await fetch(`${BASE_URL}/transaction/recent?limit=100`, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json"
-          }
-        });
+        const response = await fetch(
+          `${BASE_URL}/transaction/recent?limit=100`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          },
+        );
 
         if (!response.ok) {
           throw new Error(`Erro ao buscar despesas: ${response.statusText}`);
@@ -49,13 +63,17 @@ export default function Despesas() {
         }
 
         const despesasFiltradas = data.recent.transaction.filter(
-          (item: any) => item.type === "EXPENSE" &&
-                         new Date(item.date).getMonth() === currentMonthIndex
+          (item: any) =>
+            item.type === "EXPENSE" &&
+            new Date(item.date).getMonth() === currentMonthIndex,
         );
 
         setDespesas(despesasFiltradas);
 
-        const total = despesasFiltradas.reduce((sum: number, d: any) => sum + d.amount, 0);
+        const total = despesasFiltradas.reduce(
+          (sum: number, d: any) => sum + d.amount,
+          0,
+        );
         setTotalDespesas(total);
       } catch (error) {
         console.error("Erro ao carregar despesas:", error);
@@ -65,8 +83,10 @@ export default function Despesas() {
     fetchDespesas();
   }, [currentMonthIndex, token, isAuthenticated, BASE_URL]);
 
-  const previousMonth = () => setCurrentMonthIndex(prev => (prev > 0 ? prev - 1 : months.length - 1));
-  const nextMonth = () => setCurrentMonthIndex(prev => (prev < months.length - 1 ? prev + 1 : 0));
+  const previousMonth = () =>
+    setCurrentMonthIndex((prev) => (prev > 0 ? prev - 1 : months.length - 1));
+  const nextMonth = () =>
+    setCurrentMonthIndex((prev) => (prev < months.length - 1 ? prev + 1 : 0));
 
   useEffect(() => {
     document.body.classList.remove("receitas-page");
@@ -74,7 +94,6 @@ export default function Despesas() {
 
     return () => document.body.classList.remove("despesas-page");
   }, []);
-
 
   if (!isAuthenticated) {
     return (
@@ -101,9 +120,13 @@ export default function Despesas() {
           </div>
 
           <div className="month-selector">
-            <button onClick={previousMonth} className="month-nav-button"><FaArrowLeft /></button>
+            <button onClick={previousMonth} className="month-nav-button">
+              <FaArrowLeft />
+            </button>
             <span className="current-month">{months[currentMonthIndex]}</span>
-            <button onClick={nextMonth} className="month-nav-button"><FaArrowRight /></button>
+            <button onClick={nextMonth} className="month-nav-button">
+              <FaArrowRight />
+            </button>
           </div>
 
           <div className="table-container">
@@ -119,7 +142,11 @@ export default function Despesas() {
               </thead>
               <tbody>
                 {despesas.length === 0 ? (
-                  <tr><td colSpan={4} style={{ textAlign: "center" }}>Nenhuma despesa encontrada</td></tr>
+                  <tr>
+                    <td colSpan={4} style={{ textAlign: "center" }}>
+                      Nenhuma despesa encontrada
+                    </td>
+                  </tr>
                 ) : (
                   despesas.map((despesa: any, index: number) => (
                     <tr key={index}>

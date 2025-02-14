@@ -1,8 +1,7 @@
-
 // components/Layout.tsx
 "use client";
 
-import React, { useState} from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -26,22 +25,19 @@ import "../dashboard/dashboard.css";
 
 import Login from "../login/page";
 
-
 interface LayoutProps {
   children: React.ReactNode;
 }
 
 export default function Layout({ children }: LayoutProps) {
-  const { isAuthenticated,  logout } = useAuth();
+  const { isAuthenticated, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const pathname = usePathname();
 
-
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
-
 
   const handleLoginClick = () => {
     setShowLoginModal(true);
@@ -53,8 +49,9 @@ export default function Layout({ children }: LayoutProps) {
   };
 
   // Determine the theme based on the current route
-  const themeClass = pathname.startsWith("/despesas") ? "despesas-page" : "receitas-page";
-
+  const themeClass = pathname.startsWith("/despesas")
+    ? "despesas-page"
+    : "receitas-page";
 
   return (
     <div className={`dashboard-container ${themeClass}`}>
@@ -145,7 +142,6 @@ export default function Layout({ children }: LayoutProps) {
         )}
       </aside>
 
-
       <div className="main-content">
         {children}
 
@@ -153,7 +149,10 @@ export default function Layout({ children }: LayoutProps) {
         {showLoginModal && (
           <div className="login-overlay">
             <div className="login-modal">
-              <button className="close-button" onClick={() => setShowLoginModal(false)}>
+              <button
+                className="close-button"
+                onClick={() => setShowLoginModal(false)}
+              >
                 ×
               </button>
               <Login onLoginSuccess={handleLoginSuccess} />
@@ -164,4 +163,3 @@ export default function Layout({ children }: LayoutProps) {
     </div>
   );
 }
-

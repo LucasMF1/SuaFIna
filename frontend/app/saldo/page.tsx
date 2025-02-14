@@ -1,6 +1,5 @@
 "use client";
 
-
 import { useState, useEffect } from "react";
 import "next/link";
 import { FaArrowLeft, FaPlus, FaDollarSign, FaWallet } from "react-icons/fa";
@@ -9,27 +8,31 @@ import Layout from "../components/Layout";
 import { useAuth } from "../contexts/AuthContext";
 import Link from "next/link";
 
-
 export default function Contas() {
   const { isAuthenticated } = useAuth();
-  const [accounts, ] = useState([]);
+  const [accounts] = useState([]);
   const [saldoTotal, setSaldoTotal] = useState(0);
 
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://default-url.com";
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const BASE_URL =
+    process.env.NEXT_PUBLIC_BASE_URL || "https://default-url.com";
 
   useEffect(() => {
     if (!isAuthenticated || !token) return;
 
     const fetchSaldo = async () => {
       try {
-        const response = await fetch(`${BASE_URL}/transaction/recent?limit=100`, {
-          method: "GET",
-          headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json"
-          }
-        });
+        const response = await fetch(
+          `${BASE_URL}/transaction/recent?limit=100`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          },
+        );
 
         if (!response.ok) {
           throw new Error(`Erro ao buscar saldo: ${response.statusText}`);
@@ -57,7 +60,6 @@ export default function Contas() {
 
   const handleDownloadAll = () => {
     alert("Saldo ainda não implementado.");
-
   };
 
   if (!isAuthenticated) {

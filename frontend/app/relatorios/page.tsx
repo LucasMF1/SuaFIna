@@ -1,6 +1,5 @@
 "use client";
 
-
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { FaArrowLeft, FaDownload } from "react-icons/fa";
@@ -13,26 +12,33 @@ import { useAuth } from "../contexts/AuthContext";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-
 export default function Relatorios() {
   const { isAuthenticated } = useAuth();
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://default-url.com";
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const BASE_URL =
+    process.env.NEXT_PUBLIC_BASE_URL || "https://default-url.com";
 
-  const [dadosPorMes, setDadosPorMes] = useState({ receitas: {}, despesas: {} });
+  const [dadosPorMes, setDadosPorMes] = useState({
+    receitas: {},
+    despesas: {},
+  });
 
   useEffect(() => {
     if (!isAuthenticated || !token) return;
 
     const fetchTransacoes = async () => {
       try {
-        const response = await fetch(`${BASE_URL}/transaction/recent?limit=200`, {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
+        const response = await fetch(
+          `${BASE_URL}/transaction/recent?limit=200`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
           },
-        });
+        );
 
         if (!response.ok) {
           throw new Error(`Erro ao buscar transações: ${response.statusText}`);
@@ -66,7 +72,6 @@ export default function Relatorios() {
       }
     });
 
-
     setDadosPorMes({ receitas: receitasPorMes, despesas: despesasPorMes });
   };
 
@@ -75,16 +80,21 @@ export default function Relatorios() {
     datasets: [
       {
         data: Object.values(dados), // Cada fatia será o total daquele mês
-        backgroundColor: ["#00CFFF", "#4CAF50", "#FF9900", "#6666FF", "#FFE600", "#FF0000"],
+        backgroundColor: [
+          "#00CFFF",
+          "#4CAF50",
+          "#FF9900",
+          "#6666FF",
+          "#FFE600",
+          "#FF0000",
+        ],
         borderWidth: 1,
       },
     ],
-
   });
 
   const handleDownloadAll = () => {
     alert("Download de relatórios ainda não implementado.");
-
   };
 
   if (!isAuthenticated) {

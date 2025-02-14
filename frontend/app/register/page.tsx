@@ -12,7 +12,8 @@ export default function Register() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const router = useRouter();
-  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "https://default-url.com";
+  const BASE_URL =
+    process.env.NEXT_PUBLIC_BASE_URL || "https://default-url.com";
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -23,9 +24,11 @@ export default function Register() {
         password,
       });
       router.push("/?showLogin=true");
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (err) {
-      setError("Erro ao registrar usuário! Verifique os dados e tente novamente.");
+      setError(
+        "Erro ao registrar usuário! Verifique os dados e tente novamente.",
+      );
     }
   };
 
