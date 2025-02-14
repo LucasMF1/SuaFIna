@@ -6,12 +6,13 @@ import axios from "axios";
 import "./login.css";
 import { useAuth } from "../contexts/AuthContext";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 interface LoginProps {
   onLoginSuccess?: () => void;
   onClose?: () => void;
 }
 
-export default function Login({ onLoginSuccess, onClose }: LoginProps) {
+export default function Login({ onLoginSuccess, onClose }: any) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
